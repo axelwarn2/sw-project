@@ -1,0 +1,156 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.main {
+    display: flex;
+    align-items: center;
+    gap: 58px;
+    width: 100%;
+    padding-left: 58px;
+    padding-top: 30px;
+}
+
+.directory {
+    width: 868px;
+    height: 894px;
+    border: solid 1px;
+    padding-left: 18px;
+    padding-top: 18px;
+}
+
+.directory__form {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.form {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.form__name-search {
+    width: 392px;
+}
+
+.form__name-directory {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form__input {
+    width: 394px;
+    padding-top: 5px;
+    height: 40px;
+    border-radius: 10px;
+    border: solid 1px;
+}
+
+.form__buttons {
+    display: flex;
+    gap: 10px;
+    padding-top: 23px;
+}
+
+.form__button {
+    width: 134px;
+    height: 40px;
+    border-radius: 10px;
+    border: solid 1px;
+    background-color: #B5B5B5;
+    color: #F5F5F5;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: 15px;
+}
+
+.directory__list {
+    display: flex;
+    flex-direction: column;
+}
+
+.directory__item {
+    display: flex;
+    flex-direction: column;
+    padding-top: 15px;
+    gap: 3px;
+}
+
+.directory__folder {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.directory__folder-two {
+    display: flex;
+    align-items: center;
+    padding-left: 40px;
+    gap: 10px;
+}
+
+.directory__file {
+    padding-left: 80px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.photos {
+    width: 868px;
+    height: 894px;
+    border: solid 1px;
+    display: flex;
+    flex-direction: column;
+}
+
+.photos__selected {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.photos__label {
+    width: 217px;
+    height: 47px;
+    display: flex;
+    align-items: center;
+    text-decoration: underline;
+}
+
+.photos__button {
+    width: 134px;
+    height: 40px;
+    border-radius: 10px;
+    border: solid 1px;
+    background-color: #B5B5B5;
+    color: #F5F5F5;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: 15px;
+}
+
+.photos__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.photos__img {
+    width: 586px;
+    height: 763px;
+    padding-top: 100px;
+}
