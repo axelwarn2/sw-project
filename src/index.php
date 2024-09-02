@@ -6,7 +6,4 @@ use App\Router;
 use App\Controllers\FileController;
 
 $router = new Router();
-
-require __DIR__ . '/routes/web.php';
-
 $router->dispatch();

@@ -13,6 +13,7 @@ return array(
     'Src\\' => array($baseDir . '/src'),
     'PhpOption\\' => array($vendorDir . '/phpoption/phpoption/src/PhpOption'),
     'GrahamCampbell\\ResultType\\' => array($vendorDir . '/graham-campbell/result-type/src'),
+    'Framework\\' => array($baseDir . '/src/framework'),
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
     'App\\' => array($baseDir . '/src/app'),
 );

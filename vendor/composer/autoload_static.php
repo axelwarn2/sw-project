@@ -30,6 +30,10 @@ class ComposerStaticInit7f6f36c833b31b0d16e312523652ac00
         array (
             'GrahamCampbell\\ResultType\\' => 26,
         ),
+        'F' => 
+        array (
+            'Framework\\' => 10,
+        ),
         'D' => 
         array (
             'Dotenv\\' => 7,
@@ -68,6 +72,10 @@ class ComposerStaticInit7f6f36c833b31b0d16e312523652ac00
         'GrahamCampbell\\ResultType\\' => 
         array (
             0 => __DIR__ . '/..' . '/graham-campbell/result-type/src',
+        ),
+        'Framework\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/framework',
         ),
         'Dotenv\\' => 
         array (
