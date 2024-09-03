@@ -10,40 +10,40 @@
     <main class="main">
         <div class="directory">
             <div class="directory__form">
-                <form action="" class="form">
-                    <div class="form__name-search">
-                        <span class="form__name-directory">
-                            <p class="form__label">Наименование директории</p>
-                            <input class="form__input" type="text">
-                        </span>
-                    </div>
-                    <div class="form__buttons">
-                        <input type="button" class="form__button" value="Добавить папку">
-                        <input type="button" class="form__button" value="Добавить файл">
-                        <input type="button" class="form__button" value="Удалить">
-                    </div>
-                </form>
+                <div class="form__name-search">
+                    <span class="form__name-directory">
+                        <p class="form__label">Наименование директории</p>
+                        <input class="form__input" type="text" id="directoryNameInput" disabled>
+                    </span>
+                </div>
+                <div class="form__buttons">
+                    <form action="/create-directory" method="POST" class="form">
+                        <div class="form__buttons">
+                            <input type="button" class="form__button" value="Добавить папку" id="addFolderButton" disabled>
+                        </div>
+                    </form>
+                    <form action="/upload" method="POST" class="form" enctype="multipart/form-data">
+                        <div class="form__buttons">
+                            <input type="submit" class="form__button" value="Добавить файл" id="addFileButton" disabled>
+                        </div>
+                    </form>
+                    <form action="/delete" method="POST" class="form">
+                        <div class="form__buttons">
+                            <input type="hidden" id="itemId" name="itemId">
+                            <input type="submit" class="form__button" value="Удалить" id="deleteButton" disabled>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="directory__list">
-                <div class="directory__item">
-                    <p class="directory__folder"><img src="../public/images/Folder.jpg">images</p>
-                    <p class="directory__folder-two"><img src="../public/images/Folder.jpg">animals</p>
-                    <p class="directory__file"><img src="../public/images/File.png">dog.jpeg</p>
-                    <p class="directory__file"><img src="../public/images/File.png" alt="">cat.jpeg</p>
-                </div>
-                <div class="directory__item">
-                    <p class="directory__folder"><img src="../public/images/Folder.jpg">myfolder</p>
-                    <p class="directory__folder-two"><img src="../public/images/Folder.jpg">photos</p>
-                    <p class="directory__file"><img src="../public/images/File.png">myphoto.jpeg</p>
-                    <p class="directory__file"><img src="../public/images/File.png">doc.docx</p>
-                </div>
+                <?php echo $treeHtml; ?>
             </div>
         </div>
 
         <div class="photos">
             <div class="photos__selected">
                 <p class="photos__label">Выбрано: </p>
-                <button class="photos__button">Скачать</button>
+                <button class="photos__button" id="downloadButton" disabled>Скачать</button>
             </div>
             <div class="photos__image">
                 <img class="photos__img" src="../public/images/noimage.jpeg" alt="">

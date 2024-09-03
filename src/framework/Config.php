@@ -16,7 +16,7 @@ class Config
 
     protected function loadEnv()
     {
-        $dotenv = Dotenv::createImmutable(__DIR__ . '/../../../');
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
         $dotenv->load();
     }
 

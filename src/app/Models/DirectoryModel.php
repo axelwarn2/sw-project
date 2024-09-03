@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Framework\Models\Model;
 use Framework\CDatabase;
-class FileModel extends Model
+class DirectoryModel extends Model
 {
-    protected static string $table = 'files';
+    protected static string $table = 'directories';
 
-    public function getFiles(): array
+    public function getDirectories(): array
     {
-        $query = "SELECT * FROM " . static::$table;
+        $query = "SELECT * FROM " . static::$table . " ORDER BY path";
         $stmt = CDatabase::getInstanse()->connection->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);

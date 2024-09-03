@@ -8,7 +8,7 @@ class Router
 
     public function __construct()
     {
-        $this->get('/', 'App\Controllers\FileController@index');
+        $this->get('/', 'App\Controllers\Controller@index');
     }
 
     public function get($uri, $action)
@@ -21,7 +21,7 @@ class Router
         $this->routes['POST'][$uri] = $action;
     }
 
-    public function dispatch()
+    public function run()
     {
         $uri = $_SERVER['REQUEST_URI'];
         $method = $_SERVER['REQUEST_METHOD'];
@@ -32,8 +32,10 @@ class Router
             $controller = new $controller;
             return call_user_func([$controller, $method]);
         } else {
-            header("HTTP/1.0 404 Not Found");
-            echo "404 Not Found";
+            ?>
+            <h2 style="font-size: 30px; text-align: center">404 Not Found</h2>
+            <p style="font-size: 20px; text-align: center">Не удалось найти страницу</p>
+            <?php
         }
     }
 }
