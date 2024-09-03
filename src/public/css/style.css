@@ -157,3 +157,10 @@ body {
     height: 763px;
     padding-top: 100px;
 }
+
+.directory__item.selected {
+    background-color: lightblue;
+}
+.directory__button.active {
+    background-color: lightblue;
+}

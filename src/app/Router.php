@@ -9,6 +9,7 @@ class Router
     public function __construct()
     {
         $this->get('/', 'App\Controllers\Controller@index');
+        $this->post('/create-directory', 'App\Controllers\Controller@createDirectory');
     }
 
     public function get($uri, $action)

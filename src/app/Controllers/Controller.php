@@ -50,4 +50,17 @@ class Controller
 
         return $html;
     }
+
+    public function createDirectory()
+    {
+        $parentId = $_POST['parentId'] ?? null;
+        $name = $_POST['name'] ?? '';
+    
+        if (!empty($name)) {
+            $this->directoryModel->createDirectory($name, $parentId);
+        }
+    
+        header('Location: /');
+    }
+    
 }

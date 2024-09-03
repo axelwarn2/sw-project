@@ -15,4 +15,11 @@ class DirectoryModel extends Model
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    public function createDirectory($name, $parentId)
+    {
+        $query = "INSERT INTO " . static::$table . " (name, parent_id) VALUES (:name, :parent_id)";
+        $stmt = CDatabase::getInstanse()->connection->prepare($query);
+        $stmt->execute(['name' => $name, 'parent_id' => $parentId]);    
+    }
 }
