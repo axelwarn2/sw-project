@@ -24,9 +24,10 @@ class Router
 
     public function run()
     {
-        $uri = $_SERVER['REQUEST_URI'];
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $method = $_SERVER['REQUEST_METHOD'];
 
+        
         if (isset($this->routes[$method][$uri])) {
             $action = $this->routes[$method][$uri];
             [$controller, $method] = explode('@', $action);
