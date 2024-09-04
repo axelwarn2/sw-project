@@ -34,7 +34,7 @@
         <div class="photos">
             <div class="photos__selected">
                 <p class="photos__label">Выбрано: </p>
-                <button class="photos__button" id="downloadButton" disabled>Скачать</button>
+                <button class="downloadButton" id="downloadButton" disabled>Скачать</button>
             </div>
             <div class="photos__image">
                 <img class="photos__img" src="../public/images/noimage.jpeg" alt="No image">
