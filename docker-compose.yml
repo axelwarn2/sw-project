@@ -27,6 +27,9 @@ services:
       - ${DB_PORT}:3306
     networks:
       - sw
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
   sw-nginx:
     image: nginx:latest
@@ -46,3 +49,6 @@ services:
 networks:
   sw:
     driver: bridge
+
+volumes:
+  mysql-data:
