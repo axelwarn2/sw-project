@@ -5,7 +5,7 @@ services:
       dockerfile: ./.docker/php/Dockerfile
     volumes:
       - ./:/var/www
-      - ./vendor:/var/www/vendor
+      - ./vendor:/var/www/vendorz
     ports:
       - 8000:9000
     restart: unless-stopped
