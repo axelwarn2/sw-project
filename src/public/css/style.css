@@ -164,3 +164,7 @@ body {
 .form__button.active {
     background-color: lightblue;
 }
+
+.directory__file.selected {
+    background-color: lightblue;
+}

@@ -24,14 +24,15 @@ class Controller
         require __DIR__ . '/../Views/index.php';
     }
 
-    protected function buildTreeHtml($directories, $files, $parentId = null)
+    protected function buildTreeHtml($directories, $files, $parentId = null, $parentPath = '')
     {
         $html = '';
 
         foreach ($directories as $directory) {
             if ($directory['parent_id'] == $parentId) {
+                $currentPath = $parentPath . $directory['name'] . '/';
                 $html .= '<div class="directory__item">';
-                $html .= '<p class="directory__folder" data-id="' . $directory['id'] . '">
+                $html .= '<p class="directory__folder" data-id="' . $directory['id'] . '" data-path="' . $currentPath . '">
                             <img src="../public/images/Folder.jpg" alt="Folder"> ' . $directory['name'] . '
                           </p>';
 
@@ -43,7 +44,7 @@ class Controller
                     }
                 }
 
-                $html .= $this->buildTreeHtml($directories, $files, $directory['id']);
+                $html .= $this->buildTreeHtml($directories, $files, $directory['id'], $currentPath);
                 $html .= '</div>';
             }
         }
@@ -63,4 +64,31 @@ class Controller
         header('Location: /');
     }
     
+    public function createFile()
+    {
+        if (isset($_FILES['file'])) {
+            $directoryId = $_POST['directoryId'] ?? null;
+            $filename = $_FILES['file']['name'];
+
+            if (!empty($filename) && $directoryId) {
+                $this->fileModel->createFile($filename, $directoryId);
+            }
+        }
+        header('Location: /');
+        exit;
+    }    
+
+    public function delete()
+    {
+        $itemId = $_POST['itemId'] ?? null;
+        $itemType = $_POST['itemType'] ?? '';
+
+        if ($itemType === 'file') {
+            $this->fileModel->deleteFile($itemId);
+        } elseif ($itemType === 'directory') {
+            $this->directoryModel->deleteDirectory($itemId);
+        }
+
+        header('Location: /');
+    }
 }

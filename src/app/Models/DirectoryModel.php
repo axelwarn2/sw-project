@@ -4,9 +4,22 @@ namespace App\Models;
 
 use Framework\Models\Model;
 use Framework\CDatabase;
+
 class DirectoryModel extends Model
 {
     protected static string $table = 'directories';
+
+    private function getParentPath($parentId)
+    {
+        if ($parentId) {
+            $query = "SELECT path FROM " . static::$table . " WHERE id = :id";
+            $stmt = CDatabase::getInstanse()->connection->prepare($query);
+            $stmt->execute(['id' => $parentId]);
+            return $stmt->fetchColumn();
+        }
+
+        return '';
+    }
 
     public function getDirectories(): array
     {
@@ -18,8 +31,28 @@ class DirectoryModel extends Model
 
     public function createDirectory($name, $parentId)
     {
-        $query = "INSERT INTO " . static::$table . " (name, parent_id) VALUES (:name, :parent_id)";
+        $path = $this->getParentPath($parentId) . '/' . $name;
+        
+        $query = "INSERT INTO " . static::$table . " (name, parent_id, path) VALUES (:name, :parent_id, :path)";
         $stmt = CDatabase::getInstanse()->connection->prepare($query);
-        $stmt->execute(['name' => $name, 'parent_id' => $parentId]);    
+        $stmt->execute(['name' => $name, 'parent_id' => $parentId, 'path' => $path]);    
+    }
+
+    public function deleteDirectory($directoryId)
+    {
+        $query = "DELETE FROM files WHERE directory_id = :directory_id";
+        $stmt = CDatabase::getInstanse()->connection->prepare($query);
+        $stmt->execute(['directory_id' => $directoryId]);
+
+        $query = "SELECT id FROM " . static::$table . " WHERE parent_id = :parent_id";
+        $stmt = CDatabase::getInstanse()->connection->prepare($query);
+        $stmt->execute(['parent_id' => $directoryId]);
+        $childDirectories = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($childDirectories as $childDirectory) {
+            $this->deleteDirectory($childDirectory['id']);
+        }
+
+        static::deleteIternal($directoryId);
     }
 }

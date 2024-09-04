@@ -10,6 +10,8 @@ class Router
     {
         $this->get('/', 'App\Controllers\Controller@index');
         $this->post('/create-directory', 'App\Controllers\Controller@createDirectory');
+        $this->post('/create-file', 'App\Controllers\Controller@createFile');
+        $this->post('/delete', 'App\Controllers\Controller@delete');
     }
 
     public function get($uri, $action)
