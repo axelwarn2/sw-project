@@ -107,6 +107,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    word-break: break-all;
 }
 
 .photos {
@@ -127,11 +128,12 @@ body {
 }
 
 .photos__label {
-    width: 217px;
+    width: 400px;
     height: 47px;
     display: flex;
     align-items: center;
     text-decoration: underline;
+    word-break: break-all;
 }
 
 .downloadButton {

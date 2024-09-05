@@ -33,10 +33,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (folderTarget) {
             document.querySelectorAll('.directory__folder').forEach(folder => folder.classList.remove('selected'));
+            document.querySelectorAll('.directory__file').forEach(file => file.classList.remove('selected'));
             folderTarget.classList.add('selected');
             selectedItemId = folderTarget.dataset.id;
             selectedItemType = 'directory';
             parentIdInput.value = selectedItemId;
+            directoryNameInput.disabled = false;
             selectedPathLabel.textContent = `Выбрано: ${folderTarget.dataset.path}`;
 
             addFileButton.disabled = false;
@@ -50,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } else if (fileTarget) {
             document.querySelectorAll('.directory__file').forEach(file => file.classList.remove('selected'));
+            document.querySelectorAll('.directory__folder').forEach(folder => folder.classList.remove('selected'));
             fileTarget.classList.add('selected');
             selectedItemId = fileTarget.dataset.id;
             selectedItemType = 'file';
@@ -118,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: formData
                 }).then(response => {
                     if (response.status === 413) {
-                        alert('Файл должен быть меньше 20МБ');
+                        alert('Файл должен быть больше 20МБ');
                     } else {
                         location.reload();
                     }
