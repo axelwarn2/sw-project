@@ -19,7 +19,12 @@ class Controller
     {    
         $directories = $this->directoryModel->getDirectories();
         $files = $this->fileModel->getFiles();
-        $treeHtml = $this->buildTreeHtml($directories, $files);
+
+        if ($directories && $files) {
+            $treeHtml = $this->buildTreeHtml($directories, $files);            
+        } else {
+            $treeHtml = '<p style="padding-top: 20px; padding-left: 20px; font-size: 20px">Нет директорий или файлов</p>';
+        }
 
         require __DIR__ . '/../Views/index.php';
     }
@@ -60,8 +65,6 @@ class Controller
         if (!empty($name)) {
             $this->directoryModel->createDirectory($name, $parentId);
         }
-    
-        header('Location: /');
     }
     
     public function createFile()
@@ -69,13 +72,17 @@ class Controller
         if (isset($_FILES['file'])) {
             $directoryId = $_POST['directoryId'] ?? null;
             $filename = $_FILES['file']['name'];
+            $tmpName = $_FILES['file']['tmp_name'];
 
             if (!empty($filename) && $directoryId) {
-                $this->fileModel->createFile($filename, $directoryId);
+                $uploadDir = dirname(__DIR__, 2) . '/uploads/';
+                $uploadFile = $uploadDir . $filename;
+
+                if (move_uploaded_file($tmpName, $uploadFile)) {
+                    $this->fileModel->createFile($filename, $directoryId);
+                }
             }
         }
-        header('Location: /');
-        exit;
     }    
 
     public function delete()
@@ -88,7 +95,5 @@ class Controller
         } elseif ($itemType === 'directory') {
             $this->directoryModel->deleteDirectory($itemId);
         }
-
-        header('Location: /');
     }
 }
