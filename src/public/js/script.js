@@ -54,6 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedItemId = fileTarget.dataset.id;
             selectedItemType = 'file';
 
+            directoryNameInput.value = '';
+            directoryNameInput.disabled = true;
+
             const folderPath = fileTarget.closest('.directory__item').querySelector('.directory__folder').dataset.path;
             const fileName = fileTarget.textContent.trim();
             selectedFilePath = `${folderPath}${fileName}`;
@@ -113,7 +116,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 fetch('/create-file', {
                     method: 'POST',
                     body: formData
-                }).then(() => location.reload());
+                }).then(response => {
+                    if (response.status === 413) {
+                        alert('Файл должен быть меньше 20МБ');
+                    } else {
+                        location.reload();
+                    }
+                });
             } else {
                 alert('Файл нельзя загрузить');
             }

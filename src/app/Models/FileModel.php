@@ -9,7 +9,7 @@ class FileModel extends Model
 {
     protected static string $table = 'files';
 
-    public function getFiles(): array
+    public function getFiles()
     {
         $query = "SELECT * FROM " . static::$table;
         $stmt = CDatabase::getInstanse()->connection->prepare($query);
