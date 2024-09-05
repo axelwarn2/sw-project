@@ -32,10 +32,16 @@ class DirectoryModel extends Model
     public function createDirectory($name, $parentId)
     {
         $path = $this->getParentPath($parentId) . '/' . $name;
-        
-        $query = "INSERT INTO " . static::$table . " (name, parent_id, path) VALUES (:name, :parent_id, :path)";
-        $stmt = CDatabase::getInstanse()->connection->prepare($query);
-        $stmt->execute(['name' => $name, 'parent_id' => $parentId, 'path' => $path]);    
+
+        if ($parentId) {
+            $query = "INSERT INTO " . static::$table . " (name, parent_id, path) VALUES (:name, :parent_id, :path)";
+            $stmt = CDatabase::getInstanse()->connection->prepare($query);
+            $stmt->execute(['name' => $name, 'parent_id' => $parentId, 'path' => $path]); 
+        } else {
+            $query = "INSERT INTO " . static::$table . " (name, parent_id, path) VALUES (:name, :parent_id, :path)";
+            $stmt = CDatabase::getInstanse()->connection->prepare($query);
+            $stmt->execute(['name' => $name, 'parent_id' => null, 'path' => $path]); 
+        }   
     }
 
     public function deleteDirectory($directoryId)
