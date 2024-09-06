@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileInput = document.querySelector('#fileInput');
     const downloadButton = document.querySelector('#downloadButton');
     const photosImg = document.querySelector('.photos__img');
+    deleteButton.disabled = true;
+    addFolderButton.disabled = true;
 
     let selectedItemId = null;
     let selectedItemType = '';
@@ -49,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
             downloadButton.classList.remove('active');
             
             photosImg.src = '../public/images/noimage.jpeg';
-
+            implode
         } else if (fileTarget) {
             document.querySelectorAll('.directory__file').forEach(file => file.classList.remove('selected'));
             document.querySelectorAll('.directory__folder').forEach(folder => folder.classList.remove('selected'));
@@ -97,13 +99,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = directoryNameInput.value;
         const parentId = parentIdInput.value;
 
-        if (name) {
             fetch('/create-directory', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({ name, parentId })
-            }).then(() => location.reload());
-        }
+            }).then(response => {
+                if (response.status === 400) {
+                    alert('Количество символов должно быть меньше 255');
+                    location.reload();
+                } else {
+                    location.reload();
+                }
+            });
+        
     });
 
     fileInput.addEventListener('change', async () => {
@@ -121,13 +129,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: formData
                 }).then(response => {
                     if (response.status === 413) {
-                        alert('Файл должен быть больше 20МБ');
+                        alert('Файл должен быть меньше 20МБ');
                     } else {
                         location.reload();
                     }
                 });
             } else {
-                alert('Файл нельзя загрузить');
+                alert('Файл имеет недопустимый формат');
+                location.reload();
             }
         }
     });

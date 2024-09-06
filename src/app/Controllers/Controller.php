@@ -20,7 +20,7 @@ class Controller
         $directories = $this->directoryModel->getDirectories();
         $files = $this->fileModel->getFiles();
 
-        if ($directories && $files) {
+        if ($directories || $files) {
             $treeHtml = $this->buildTreeHtml($directories, $files);            
         } else {
             $treeHtml = '<p style="padding-top: 20px; padding-left: 20px; font-size: 20px">Нет директорий или файлов</p>';
@@ -62,8 +62,10 @@ class Controller
         $parentId = $_POST['parentId'] ?? null;
         $name = $_POST['name'] ?? '';
     
-        if (!empty($name)) {
+        if (!empty($name) && strlen($name) <= 255) {
             $this->directoryModel->createDirectory($name, $parentId);
+        } elseif (strlen($name) > 255) {
+            http_response_code(400);
         }
     }
     
