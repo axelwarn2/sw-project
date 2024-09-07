@@ -14,12 +14,12 @@ class Router
         $this->post('/delete', 'App\Controllers\Controller@delete');
     }
 
-    public function get($uri, $action)
+    private function get($uri, $action)
     {
         $this->routes['GET'][$uri] = $action;
     }
 
-    public function post($uri, $action)
+    private function post($uri, $action)
     {
         $this->routes['POST'][$uri] = $action;
     }
