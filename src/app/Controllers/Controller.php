@@ -57,8 +57,11 @@ class Controller
             if (!empty($filename) && $directoryId) {
                 $uploadFile = $this->uploadDir . $filename;
 
-                move_uploaded_file($tmpName, $uploadFile);
-                $this->fileModel->createFile($filename, $directoryId);
+                if (move_uploaded_file($tmpName, $uploadFile)) {
+                    $this->fileModel->createFile($filename, $directoryId);
+                } else {
+                    throw new \Exception("Не удалось загрузить файл", 500);
+                }
             }
         }
     }    
