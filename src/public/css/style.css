@@ -163,18 +163,18 @@ body {
 }
 
 .directory__folder.selected {
-    background-color: lightblue;
+    color: blue;
 }
 .form__button.active {
-    background-color: lightblue;
+    background-color: blue;
 }
 
 .directory__file.selected {
-    background-color: lightblue;
+    color: blue;
 }
 
 .downloadButton.active {
-    background-color: lightblue;    
+    background-color: blue;    
 }
 
 @media (max-width: 1000px) {

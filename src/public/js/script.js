@@ -51,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
             downloadButton.classList.remove('active');
             
             photosImg.src = '../public/images/noimage.jpeg';
-            implode
         } else if (fileTarget) {
             document.querySelectorAll('.directory__file').forEach(file => file.classList.remove('selected'));
             document.querySelectorAll('.directory__folder').forEach(folder => folder.classList.remove('selected'));
