@@ -10,11 +10,13 @@ class Controller
 {
     private DirectoryModel $directoryModel;
     private FileModel $fileModel;
+    private string $uploadDir;
 
     public function __construct(DirectoryModel $directoryModel, FileModel $fileModel)
     {
         $this->directoryModel = $directoryModel;
         $this->fileModel = $fileModel;
+        $this->uploadDir = dirname(__DIR__, 2) . '/uploads/';
     }
     public function index()
     {   
@@ -53,8 +55,7 @@ class Controller
             $tmpName = $_FILES['file']['tmp_name'];
 
             if (!empty($filename) && $directoryId) {
-                $uploadDir = dirname(__DIR__, 2) . '/uploads/';
-                $uploadFile = $uploadDir . $filename;
+                $uploadFile = $this->uploadDir . $filename;
 
                 move_uploaded_file($tmpName, $uploadFile);
                 $this->fileModel->createFile($filename, $directoryId);
