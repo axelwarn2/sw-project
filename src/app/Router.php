@@ -34,12 +34,10 @@ class Router
             $action = $this->routes[$method][$uri];
             [$controller, $method] = explode('@', $action);
             $controller = new $controller;
-            return call_user_func([$controller, $method]);
+            $data = call_user_func([$controller, $method]);
+            include __DIR__ . '/Views/index.php';
         } else {
-            ?>
-            <h2 style="font-size: 30px; text-align: center">404 Not Found</h2>
-            <p style="font-size: 20px; text-align: center">Не удалось найти страницу</p>
-            <?php
+            throw new \Exception('Страница не найдена', 404);
         }
     }
 }

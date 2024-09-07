@@ -27,7 +27,7 @@
                 </form>
             </div>
             <div class="directory__list">
-                <?php echo $treeHtml; ?>
+                <?php echo $data['treeHtml']; ?>
             </div>
         </div>
 

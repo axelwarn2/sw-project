@@ -20,13 +20,12 @@ class Controller
         $directories = $this->directoryModel->getDirectories();
         $files = $this->fileModel->getFiles();
 
+        $treeHtml = '';
         if ($directories || $files) {
             $treeHtml = $this->buildTreeHtml($directories, $files);            
-        } else {
-            $treeHtml = '<p style="padding-top: 20px; padding-left: 20px; font-size: 20px">Нет директорий или файлов</p>';
         }
 
-        require __DIR__ . '/../Views/index.php';
+        return ['treeHtml' => $treeHtml];
     }
 
     protected function buildTreeHtml($directories, $files, $parentId = null, $parentPath = '')
