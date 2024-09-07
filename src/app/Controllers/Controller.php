@@ -7,13 +7,13 @@ use App\Models\FileModel;
 
 class Controller
 {
-    protected DirectoryModel $directoryModel;
-    protected FileModel $fileModel;
+    private DirectoryModel $directoryModel;
+    private FileModel $fileModel;
 
-    public function __construct()
+    public function __construct(DirectoryModel $directoryModel, FileModel $fileModel)
     {
-        $this->directoryModel = new DirectoryModel();
-        $this->fileModel = new FileModel();
+        $this->directoryModel = $directoryModel;
+        $this->fileModel = $fileModel;
     }
     public function index()
     {    
