@@ -16,13 +16,13 @@ class RenderDirectoryTree
         foreach ($directories as $directory) {
             if ($directory['parent_id'] == $parentId) {
                 $html .= '<div class="directory__item">';
-                $html .= '<p class="directory__folder" data-id="' . htmlspecialchars($directory['id']) . '">
+                $html .= '<p class="directory__folder" data-id="' . htmlspecialchars($directory['id']) . '" data-path="' . htmlspecialchars($directory['path']) . '/' .'">
                             <img src="../public/images/Folder.jpg" alt="Folder"> ' . htmlspecialchars($directory['name']) . '
                           </p>';
 
                 foreach ($files as $file) {
                     if ($file['directory_id'] == $directory['id']) {
-                        $html .= '<p class="directory__file" data-id="' . htmlspecialchars($file['id']) . '">
+                        $html .= '<p class="directory__file" data-id="' . htmlspecialchars($file['id']) . '" data-path="' . htmlspecialchars($directory['path'] . '/' . $file['filename']) . '">
                                     <img src="../public/images/File.png" alt="File"> ' . htmlspecialchars($file['filename']) . '
                                   </p>';
                     }

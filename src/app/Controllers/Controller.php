@@ -34,11 +34,15 @@ class Controller
         $parentId = $_POST['parentId'] ?? null;
         $name = $_POST['name'] ?? '';
     
-        if (!empty($name) && strlen($name) <= 255) {
-            $this->directoryModel->createDirectory($name, $parentId);
-        } elseif (strlen($name) > 255) {
-            http_response_code(400);
+        if (!empty($name)) {
+           throw new \Exception("Имя каталога не может быть пустым", 400);
         }
+
+        if (strlen($name) > 255) {
+            throw new \Exception("Имя каталога не должно превышать 255 символов", 400);
+        }
+
+        $this->directoryModel->createDirectory($name, $parentId);
     }
     
     public function createFile()
