@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\DirectoryModel;
 use App\Models\FileModel;
+use App\Views\RenderDirectoryTree;
 
 class Controller
 {
@@ -16,44 +17,16 @@ class Controller
         $this->fileModel = $fileModel;
     }
     public function index()
-    {    
+    {   
         $directories = $this->directoryModel->getDirectories();
         $files = $this->fileModel->getFiles();
 
-        $treeHtml = '';
-        if ($directories || $files) {
-            $treeHtml = $this->buildTreeHtml($directories, $files);            
-        }
-
-        return ['treeHtml' => $treeHtml];
-    }
-
-    protected function buildTreeHtml($directories, $files, $parentId = null, $parentPath = '')
-    {
-        $html = '';
-
-        foreach ($directories as $directory) {
-            if ($directory['parent_id'] == $parentId) {
-                $currentPath = $parentPath . $directory['name'] . '/';
-                $html .= '<div class="directory__item">';
-                $html .= '<p class="directory__folder" data-id="' . $directory['id'] . '" data-path="' . $currentPath . '">
-                            <img src="../public/images/Folder.jpg" alt="Folder"> ' . $directory['name'] . '
-                          </p>';
-
-                foreach ($files as $file) {
-                    if ($file['directory_id'] == $directory['id']) {
-                        $html .= '<p class="directory__file" data-id="' . $file['id'] . '">
-                                    <img src="../public/images/File.png" alt="File"> ' . $file['filename'] . '
-                                  </p>';
-                    }
-                }
-
-                $html .= $this->buildTreeHtml($directories, $files, $directory['id'], $currentPath);
-                $html .= '</div>';
-            }
-        }
-
-        return $html;
+        $render = new RenderDirectoryTree();
+        $directoryTree  = $render->render($directories, $files);
+        
+        return [
+            "directoryTree" => $directoryTree ,
+        ];
     }
 
     public function createDirectory()
@@ -79,9 +52,8 @@ class Controller
                 $uploadDir = dirname(__DIR__, 2) . '/uploads/';
                 $uploadFile = $uploadDir . $filename;
 
-                if (move_uploaded_file($tmpName, $uploadFile)) {
-                    $this->fileModel->createFile($filename, $directoryId);
-                }
+                move_uploaded_file($tmpName, $uploadFile);
+                $this->fileModel->createFile($filename, $directoryId);
             }
         }
     }    

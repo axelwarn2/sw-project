@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Models\DirectoryModel;
+use App\Models\DirectoryModel;  
 use App\Models\FileModel;
 use App\Controllers\Controller;
 
@@ -45,6 +45,8 @@ class Router
             $controller = new Controller($directoryModel, $fileModel);
 
             $data = call_user_func([$controller, $method]);
+            extract($data);
+
             require __DIR__ . '/Views/index.php';
         } else {
             throw new \Exception('Page not found', 404);
