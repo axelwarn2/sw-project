@@ -25,7 +25,7 @@ class Controller
         $directoryTree  = $render->render($directories, $files);
         
         return [
-            "directoryTree" => $directoryTree ,
+            "directoryTree" => $directoryTree,
         ];
     }
 
@@ -34,7 +34,7 @@ class Controller
         $parentId = $_POST['parentId'] ?? null;
         $name = $_POST['name'] ?? '';
     
-        if (!empty($name)) {
+        if (empty($name)) {
            throw new \Exception("Имя каталога не может быть пустым", 400);
         }
 

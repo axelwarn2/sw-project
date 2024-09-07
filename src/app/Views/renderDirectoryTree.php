@@ -16,7 +16,7 @@ class RenderDirectoryTree
         foreach ($directories as $directory) {
             if ($directory['parent_id'] == $parentId) {
                 $html .= '<div class="directory__item">';
-                $html .= '<p class="directory__folder" data-id="' . htmlspecialchars($directory['id']) . '" data-path="' . htmlspecialchars($directory['path']) . '/' .'">
+                $html .= '<p class="directory__folder" data-id="' . htmlspecialchars($directory['id']) . '" data-path="' . $directory['path']  . "/" . '">
                             <img src="../public/images/Folder.jpg" alt="Folder"> ' . htmlspecialchars($directory['name']) . '
                           </p>';
 

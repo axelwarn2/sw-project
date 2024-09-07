@@ -22,7 +22,7 @@
                         <input type="submit" class="form__button" id="addFolderButton" value="Добавить папку">
                         <input type="file" id="fileInput" style="display: none;">
                         <input type="submit" class="form__button" id="addFileButton" value="Добавить файл">
-                        <input type="submit" class="form__button" id="deleteButton" value="Удалить">
+                        <input type="button" class="form__button" id="deleteButton" value="Удалить">
                     </div>
                 </form>
             </div>

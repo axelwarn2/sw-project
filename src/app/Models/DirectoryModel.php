@@ -31,7 +31,7 @@ class DirectoryModel extends Model
 
     public function createDirectory($name, $parentId)
     {
-        $path = $this->getParentPath($parentId) . '/' . $name;
+        $path = $this->getParentPath($parentId) . $name;
 
         if ($parentId) {
             $query = "INSERT INTO " . static::$table . " (name, parent_id, path) VALUES (:name, :parent_id, :path)";
