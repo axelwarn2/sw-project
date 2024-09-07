@@ -8,12 +8,14 @@ class Router
 
     public function __construct()
     {
-        $this->get('/', 'App\Controllers\Controller@index');
-        $this->post('/create-directory', 'App\Controllers\Controller@createDirectory');
-        $this->post('/create-file', 'App\Controllers\Controller@createFile');
-        $this->post('/delete', 'App\Controllers\Controller@delete');
+        $this->loadRoutes();
     }
 
+    private function loadRoutes() 
+    {
+        $config = require __DIR__ . '/config/routes.php';
+        $this->routes = $config;
+    }
     private function get($uri, $action)
     {
         $this->routes['GET'][$uri] = $action;
