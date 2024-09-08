@@ -2,11 +2,11 @@
 
 return [
     "GET" => [
-        "/" => "App\Controllers\Controller@index",
+        "/" => "App\Controllers\ViewController@index",
     ],
     "POST" => [
-        "/create-directory" => "App\Controllers\Controller@createDirectory",
-        "/create-file" => "App\Controllers\Controller@createFile",
-        "/delete" => "App\Controllers\Controller@delete",
+        "/create-directory" => "App\Controllers\DirectoryController@createDirectory",
+        "/create-file" => "App\Controllers\FileController@createFile",
+        "/delete" => "App\Controllers\DirectoryController@delete",
     ],
 ];

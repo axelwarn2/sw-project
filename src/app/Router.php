@@ -40,9 +40,7 @@ class Router
             $action = $this->routes[$method][$uri];
             [$controller, $method] = explode('@', $action);
 
-            $directoryModel = new DirectoryModel();
-            $fileModel = new FileModel();
-            $controller = new Controller($directoryModel, $fileModel);
+            $controller = ControllerFactory::create($controller);
 
             $data = call_user_func([$controller, $method]);
             extract($data);
