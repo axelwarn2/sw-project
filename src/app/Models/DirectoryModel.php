@@ -23,7 +23,7 @@ class DirectoryModel extends Model
 
     public function getDirectories(): array
     {
-        $query = "SELECT * FROM " . static::$table . " ORDER BY path";
+        $query = "SELECT * FROM " . static::$table . " ORDER BY id";
         $stmt = CDatabase::getInstanse()->connection->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
