@@ -3,14 +3,17 @@
 namespace App\Controllers;
 
 use App\Models\DirectoryModel;
+use App\Models\FileModel;
 
 class DirectoryController
 {
     private DirectoryModel $directoryModel;
+    private FileModel $fileModel;
 
-    public function __construct(DirectoryModel $directoryModel)
+    public function __construct(DirectoryModel $directoryModel, FileModel $fileModel)
     {
         $this->directoryModel = $directoryModel;
+        $this->fileModel = $fileModel;
     }
 
     public function createDirectory()
@@ -19,11 +22,13 @@ class DirectoryController
         $name = $_POST['name'] ?? '';
     
         if (empty($name)) {
-           throw new \Exception("Имя каталога не может быть пустым", 400);
+           http_response_code(400);
+           return;
         }
 
         if (strlen($name) > 255) {
-            throw new \Exception("Имя каталога не должно превышать 255 символов", 400);
+            http_response_code(400);
+            return;
         }
 
         $this->directoryModel->createDirectory($name, $parentId);
@@ -32,7 +37,12 @@ class DirectoryController
     public function delete()
     {
         $itemId = $_POST['itemId'] ?? null;
+        $itemType = $_POST['itemType'] ?? '';
 
-        $this->directoryModel->deleteDirectory($itemId);
+        if ($itemType === 'file') {
+            $this->fileModel->deleteFile($itemId);
+        } elseif ($itemType === 'directory') {
+            $this->directoryModel->deleteDirectory($itemId);
+        }
     }
 }

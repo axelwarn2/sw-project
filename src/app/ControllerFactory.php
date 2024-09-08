@@ -12,7 +12,7 @@ class ControllerFactory
     {
         switch ($controllerName) {
             case 'App\Controllers\DirectoryController':
-                return new DirectoryController(new \App\Models\DirectoryModel());
+                return new DirectoryController(new \App\Models\DirectoryModel(), new \App\Models\FileModel());
             case 'App\Controllers\FileController':
                 return new FileController(new \App\Models\FileModel());
             case 'App\Controllers\ViewController':

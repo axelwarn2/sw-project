@@ -17,8 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedItemType = '';
     let selectedFilePath = ''; 
 
-    const allowedFileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'txt', 'pdf'];
-
     directoryNameInput.addEventListener('input', () => {
         if (directoryNameInput.value.trim() !== '') {
             addFolderButton.disabled = false;
@@ -98,43 +96,59 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = directoryNameInput.value;
         const parentId = parentIdInput.value;
 
-            fetch('/create-directory', {
+        try {
+            const response = await fetch('/create-directory', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({ name, parentId })
-            }).then(response => {
+            });
+
+            if (response.ok) {
+                location.reload();
+            } else {
                 if (response.status === 400) {
                     alert('Количество символов должно быть меньше 255');
                     location.reload();
                 } else {
+                    alert('Ошибка при создании каталога');
                     location.reload();
                 }
-            });
-        
+            }
+        } catch (error) {
+            alert('Ошибка при создании каталога');
+            location.reload();
+        }
     });
 
     fileInput.addEventListener('change', async () => {
         const file = fileInput.files[0];
         if (file && selectedItemId) {
-            const fileExtension = file.name.split('.').pop().toLowerCase();
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('directoryId', selectedItemId);
 
-            if (allowedFileExtensions.includes(fileExtension)) {
-                const formData = new FormData();
-                formData.append('file', file);
-                formData.append('directoryId', selectedItemId);
-
-                fetch('/create-file', {
+            try {
+                const response = await fetch('/create-file', {
                     method: 'POST',
-                    body: formData
-                }).then(response => {
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    location.reload();
+                } else {
                     if (response.status === 413) {
-                        alert('Файл должен быть меньше 20МБ');
+                        alert("Файл слишком большой");
+                        location.reload();
+                    } else if (response.status === 400) {
+                        alert("Недопустимый тип файла");
+                        location.reload();
                     } else {
+                        alert("Ошибка во время загрузки файла");
                         location.reload();
                     }
-                });
-            } else {
-                alert('Файл имеет недопустимый формат');
+                }
+            } catch (error) {
+                alert("Ошибка во время загрузки файла");
                 location.reload();
             }
         }
