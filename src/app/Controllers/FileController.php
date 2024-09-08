@@ -47,4 +47,24 @@ class FileController
             }
         }
     }
+
+    public function download()
+    {
+        $filename = $_GET['filename'] ?? '';
+
+        $filePath = $this->uploadDir . basename($filename);
+
+        if (!file_exists($filePath)) {
+            http_response_code(404);
+            echo "Ошибка: Файл не найден.";
+            return;
+        }
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
+        header('Content-Length: ' . filesize($filePath));
+        readfile($filePath);
+        exit;
+    }
 }

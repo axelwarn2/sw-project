@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
     downloadButton.addEventListener('click', () => {
         if (selectedFilePath) {
             const link = document.createElement('a');
-            link.href = `../${selectedFilePath}`;
+            link.href = `/download?filename=${encodeURIComponent(selectedFilePath)}`;
             link.download = selectedFilePath.split('/').pop();
             document.body.appendChild(link);
             link.click();

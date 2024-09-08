@@ -3,6 +3,7 @@
 return [
     "GET" => [
         "/" => "App\Controllers\ViewController@index",
+        "/download" => "App\Controllers\FileController@download",
     ],
     "POST" => [
         "/create-directory" => "App\Controllers\DirectoryController@createDirectory",
