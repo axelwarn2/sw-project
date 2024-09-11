@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const addFolderButton = document.querySelector('#addFolderButton');
     const addFileButton = document.querySelector('#addFileButton');
     const deleteButton = document.querySelector('#deleteButton');
-    const selectedPathLabel = document.querySelector('.photos__label');
+    const selectedPathSpan = document.querySelector('#selectedPath'); 
     const fileInput = document.querySelector('#fileInput');
     const downloadButton = document.querySelector('#downloadButton');
     const photosImg = document.querySelector('.photos__img');
@@ -39,7 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedItemType = 'directory';
             parentIdInput.value = selectedItemId;
             directoryNameInput.disabled = false;
-            selectedPathLabel.textContent = `Выбрано: ${folderTarget.dataset.path}`;
+            
+            const folderPath = folderTarget.dataset.path;
+            selectedPathSpan.textContent = folderPath;
+            selectedPathSpan.classList.add('selected');
 
             addFileButton.disabled = false;
             deleteButton.disabled = false;
@@ -62,7 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const folderPath = fileTarget.closest('.directory__item').querySelector('.directory__folder').dataset.path;
             const fileName = fileTarget.textContent.trim();
             selectedFilePath = `${folderPath}${fileName}`;
-            selectedPathLabel.textContent = `Выбрано: ${selectedFilePath}`;
+            selectedPathSpan.textContent = selectedFilePath;
+            selectedPathSpan.classList.add('selected');
 
             const isImage = /\.(jpg|jpeg|png|gif)$/i.test(fileName);
             if (isImage) {

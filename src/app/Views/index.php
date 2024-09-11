@@ -33,7 +33,7 @@
 
         <div class="photos">
             <div class="photos__selected">
-                <p class="photos__label">Выбрано: </p>
+                <p class="photos__label">Выбрано: <span id="selectedPath"></span></p>
                 <button class="downloadButton" id="downloadButton" disabled>Скачать</button>
             </div>
             <div class="photos__image">

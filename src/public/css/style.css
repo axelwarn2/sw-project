@@ -130,11 +130,11 @@ body {
 }
 
 .photos__label {
-    width: 400px;
+    max-width: 400px;
     height: 47px;
     display: flex;
     align-items: center;
-    text-decoration: underline;
+    border-bottom: 1px black solid;
     word-break: break-all;
 }
 
@@ -160,6 +160,7 @@ body {
     width: 586px;
     height: 763px;
     padding-top: 100px;
+    object-fit: contain;
 }
 
 .directory__folder.selected {
@@ -175,6 +176,10 @@ body {
 
 .downloadButton.active {
     background-color: blue;    
+}
+
+.selected {
+    color: blue;
 }
 
 @media (max-width: 1000px) {
