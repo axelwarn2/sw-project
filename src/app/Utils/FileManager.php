@@ -59,6 +59,11 @@ class FileManager
         return false;
     }
 
+    public function getBaseUploadDir()
+    {
+        return $this->baseUploadDir;
+    }
+
     private function deleteDirectoryRecursively($directory)
     {
         foreach (scandir($directory) as $item) {
