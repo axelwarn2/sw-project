@@ -4,16 +4,19 @@ namespace App\Controllers;
 
 use App\Models\DirectoryModel;
 use App\Models\FileModel;
+use App\Services\FileService;
 
 class DirectoryController
 {
     private DirectoryModel $directoryModel;
     private FileModel $fileModel;
+    private FileService $fileService;
 
-    public function __construct(DirectoryModel $directoryModel, FileModel $fileModel)
+    public function __construct(DirectoryModel $directoryModel, FileModel $fileModel, FileService $fileService)
     {
         $this->directoryModel = $directoryModel;
         $this->fileModel = $fileModel;
+        $this->fileService = $fileService;
     }
 
     public function createDirectory()
@@ -31,6 +34,10 @@ class DirectoryController
             return;
         }
 
+        $parentPath = $this->directoryModel->getDirectoryPath($parentId) ?? '';
+        $fullPath = $parentPath . '/' . $name;
+
+        $this->fileService->createDirectory($fullPath);
         $this->directoryModel->createDirectory($name, $parentId);
     }
 
@@ -41,8 +48,10 @@ class DirectoryController
 
         if ($itemType === 'file') {
             $this->fileModel->deleteFile($itemId);
+            $this->fileService->deleteFile($itemId);
         } elseif ($itemType === 'directory') {
             $this->directoryModel->deleteDirectory($itemId);
+            $this->fileService->deleteDirectory($itemId);
         }
     }
 }

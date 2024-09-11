@@ -3,18 +3,19 @@
 namespace App\Controllers;
 
 use App\Models\FileModel;
+use App\Services\FileService;
 
 class FileController
 {
     private FileModel $fileModel;
-    private string $uploadDir;
+    private FileService $fileService;
     private $maxFileSize = 20 * 1024 * 1024;
     private $allowedFileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'txt', 'pdf'];
 
-    public function __construct(FileModel $fileModel)
+    public function __construct(FileModel $fileModel, FileService $fileService)
     {
         $this->fileModel = $fileModel;
-        $this->uploadDir = dirname(__DIR__, 2) . '/uploads/';
+        $this->fileService = $fileService;
     }
 
     public function createFile()
@@ -36,10 +37,13 @@ class FileController
                 return;
             }
 
-            if (!empty($filename) && $directoryId) {
-                $uploadFile = $this->uploadDir . $filename;
+            if ($directoryId) {
+                $directoryPath = $this->fileModel->getParentPath($directoryId);
+                $uploadPath = $directoryPath . '/' . $filename;
 
-                if (move_uploaded_file($tmpName, $uploadFile)) {
+                $this->fileService->createDirectory(dirname($uploadPath));
+
+                if ($this->fileService->uploadFile($tmpName, $uploadPath)) {
                     $this->fileModel->createFile($filename, $directoryId);
                 } else {
                     http_response_code(500);
@@ -52,7 +56,7 @@ class FileController
     {
         $filename = $_GET['filename'] ?? '';
 
-        $filePath = $this->uploadDir . basename($filename);
+        $filePath = $this->fileService->getUploadDir() . basename($filename);
 
         if (!file_exists($filePath)) {
             http_response_code(404);
