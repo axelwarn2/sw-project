@@ -43,7 +43,9 @@ class Router
             $controller = ControllerFactory::create($controller);
 
             $data = call_user_func([$controller, $method]);
-            extract($data);
+            if($data){
+                extract($data);
+            }
 
             require __DIR__ . '/Views/index.php';
         } else {

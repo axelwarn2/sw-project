@@ -8,7 +8,7 @@ class FileManager
 
     public function __construct()
     {
-        $this->baseUploadDir = dirname(__DIR__, 2) . '/uploads/';
+        $this->baseUploadDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads';
     }
 
     public function createDirectory($path)
@@ -24,7 +24,7 @@ class FileManager
 
     public function uploadFile($tmpName, $uploadPath)
     {
-        $fullPath = $this->baseUploadDir . '/' . $uploadPath;
+        $fullPath = $this->baseUploadDir . $uploadPath;
 
         $dir = dirname($fullPath);
 
@@ -37,11 +37,10 @@ class FileManager
 
     public function deleteFile($filePath)
     {
-        $fullPath = $this->baseUploadDir . '/' . $filePath;
+        $fullPath = $filePath;
 
         if (file_exists($fullPath)) {
-            unlink($fullPath);
-            return true;
+            return unlink($fullPath);
         }
 
         return false;

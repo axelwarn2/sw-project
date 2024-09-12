@@ -9,6 +9,14 @@ class DirectoryModel extends Model
 {
     protected static string $table = 'directories';
 
+    public function getDirectoryName($directoryId)
+    {
+        $query = "SELECT name FROM " . static::$table . " WHERE id = :id";
+        $stmt = CDatabase::getInstanse()->connection->prepare($query);
+        $stmt->execute(['id' => $directoryId]);
+        return $stmt->fetchColumn();
+    }
+
     public function getDirectoryPath($directoryId)
     {
         $query = "SELECT path FROM " . static::$table . " WHERE id = :id";

@@ -70,7 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const isImage = /\.(jpg|jpeg|png|gif)$/i.test(fileName);
             if (isImage) {
-                photosImg.src = `../uploads/${fileName}`;
+                let fullFilePath = fileTarget.dataset.path;
+                photosImg.src = `../uploads/${fullFilePath}`;
                 photosImg.style.display = 'block';
             } else {
                 photosImg.src = '../public/images/noimage.jpeg';
@@ -164,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({ itemId: selectedItemId, itemType: selectedItemType })
-            }).then(() => location.reload());
+            });
         }
     });
 
@@ -172,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedFilePath) {
             const link = document.createElement('a');
             link.href = `/download?filename=${encodeURIComponent(selectedFilePath)}`;
+            console.log(link.href);
             link.download = selectedFilePath.split('/').pop();
             document.body.appendChild(link);
             link.click();

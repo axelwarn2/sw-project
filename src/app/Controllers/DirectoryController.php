@@ -45,13 +45,15 @@ class DirectoryController
     {
         $itemId = $_POST['itemId'] ?? null;
         $itemType = $_POST['itemType'] ?? '';
-
+        
         if ($itemType === 'file') {
+            $filePath = $this->fileModel->getFilePath($itemId);
             $this->fileModel->deleteFile($itemId);
-            $this->fileService->deleteFile($itemId);
+            $this->fileService->deleteFile($filePath);
         } elseif ($itemType === 'directory') {
+            $dirPath = $this->directoryModel->getDirectoryPath($itemId);
             $this->directoryModel->deleteDirectory($itemId);
-            $this->fileService->deleteDirectory($itemId);
+            $this->fileService->deleteDirectory($dirPath);
         }
     }
 }

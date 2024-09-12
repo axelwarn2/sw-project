@@ -56,7 +56,7 @@ class FileController
     {
         $filename = $_GET['filename'] ?? '';
 
-        $filePath = $this->fileService->getUploadDir() . basename($filename);
+        $filePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $filename;
 
         if (!file_exists($filePath)) {
             http_response_code(404);
@@ -69,6 +69,5 @@ class FileController
         header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
         header('Content-Length: ' . filesize($filePath));
         readfile($filePath);
-        exit;
     }
 }
