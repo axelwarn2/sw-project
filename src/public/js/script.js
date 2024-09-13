@@ -17,14 +17,71 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedItemType = '';
     let selectedFilePath = ''; 
 
+    const setButtonState = (button, isActive) => {
+        button.disabled = !isActive;
+        button.classList.toggle('active', isActive);
+    };
+
+    const updateSelectedPath = (path) => {
+        selectedPathSpan.textContent = path;
+        selectedPathSpan.classList.add('selected');
+    };
+
+    const clearSelection = () => {
+        document.querySelectorAll('.directory__folder, .directory__file').forEach(item => item.classList.remove('selected'));
+        selectedItemId = null;
+        selectedItemType = '';
+        selectedFilePath = '';
+        updateSelectedPath('');
+        setButtonState(addFileButton, false);
+        setButtonState(deleteButton, false);
+        setButtonState(downloadButton, false);
+    };
+
+    const handleFolderSelection = (folderTarget) => {
+        clearSelection();
+        folderTarget.classList.add('selected');
+        selectedItemId = folderTarget.dataset.id;
+        selectedItemType = 'directory';
+        parentIdInput.value = selectedItemId;
+        directoryNameInput.disabled = false;
+
+        const folderPath = folderTarget.dataset.path;
+        updateSelectedPath(folderPath);
+
+        setButtonState(addFileButton, true);
+        setButtonState(deleteButton, true);
+        setButtonState(downloadButton, false);
+        photosImg.src = '../public/images/noimage.jpeg';
+    };
+
+    const handleFileSelection = (fileTarget) => {
+        clearSelection();
+        fileTarget.classList.add('selected');
+        selectedItemId = fileTarget.dataset.id;
+        selectedItemType = 'file';
+
+        directoryNameInput.value = '';
+        directoryNameInput.disabled = true;
+
+        const folderPath = fileTarget.closest('.directory__item').querySelector('.directory__folder').dataset.path;
+        const fileName = fileTarget.textContent.trim();
+        selectedFilePath = `${folderPath}${fileName}`;
+        updateSelectedPath(selectedFilePath);
+
+        const isImage = /\.(jpg|jpeg|png|gif)$/i.test(fileName);
+        photosImg.src = isImage ? `../uploads/${fileTarget.dataset.path}` : '../public/images/noimage.jpeg';
+        photosImg.style.display = 'block';
+
+        setButtonState(addFolderButton, false);
+        setButtonState(addFileButton, false);
+        setButtonState(deleteButton, true);
+        setButtonState(downloadButton, true);
+    };
+
     directoryNameInput.addEventListener('input', () => {
-        if (directoryNameInput.value.trim() !== '') {
-            addFolderButton.disabled = false;
-            addFolderButton.classList.add('active');
-        } else {
-            addFolderButton.disabled = true;
-            addFolderButton.classList.remove('active');
-        }
+        const isActive = directoryNameInput.value.trim() !== '';
+        setButtonState(addFolderButton, isActive);
     });
 
     directoryTree.addEventListener('click', (event) => {
@@ -32,59 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const fileTarget = event.target.closest('.directory__file');
 
         if (folderTarget) {
-            document.querySelectorAll('.directory__folder').forEach(folder => folder.classList.remove('selected'));
-            document.querySelectorAll('.directory__file').forEach(file => file.classList.remove('selected'));
-            folderTarget.classList.add('selected');
-            selectedItemId = folderTarget.dataset.id;
-            selectedItemType = 'directory';
-            parentIdInput.value = selectedItemId;
-            directoryNameInput.disabled = false;
-            
-            const folderPath = folderTarget.dataset.path;
-            selectedPathSpan.textContent = folderPath;
-            selectedPathSpan.classList.add('selected');
-
-            addFileButton.disabled = false;
-            deleteButton.disabled = false;
-            addFileButton.classList.add('active');
-            deleteButton.classList.add('active');
-            downloadButton.disabled = true;
-            downloadButton.classList.remove('active');
-            
-            photosImg.src = '../public/images/noimage.jpeg';
+            handleFolderSelection(folderTarget);
         } else if (fileTarget) {
-            document.querySelectorAll('.directory__file').forEach(file => file.classList.remove('selected'));
-            document.querySelectorAll('.directory__folder').forEach(folder => folder.classList.remove('selected'));
-            fileTarget.classList.add('selected');
-            selectedItemId = fileTarget.dataset.id;
-            selectedItemType = 'file';
-
-            directoryNameInput.value = '';
-            directoryNameInput.disabled = true;
-
-            const folderPath = fileTarget.closest('.directory__item').querySelector('.directory__folder').dataset.path;
-            const fileName = fileTarget.textContent.trim();
-            selectedFilePath = `${folderPath}${fileName}`;
-            selectedPathSpan.textContent = selectedFilePath;
-            selectedPathSpan.classList.add('selected');
-
-            const isImage = /\.(jpg|jpeg|png|gif)$/i.test(fileName);
-            if (isImage) {
-                let fullFilePath = fileTarget.dataset.path;
-                photosImg.src = `../uploads/${fullFilePath}`;
-                photosImg.style.display = 'block';
-            } else {
-                photosImg.src = '../public/images/noimage.jpeg';
-            }
-
-            addFolderButton.disabled = true;
-            addFolderButton.classList.remove('active');
-            addFileButton.disabled = true;
-            addFileButton.classList.remove('active');
-            deleteButton.disabled = false;
-            deleteButton.classList.add('active');
-            downloadButton.disabled = false;
-            downloadButton.classList.add('active');
+            handleFileSelection(fileTarget);
         }
     });
 
@@ -108,19 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: new URLSearchParams({ name, parentId })
             });
 
-            if (response.ok) {
-                location.reload();
-            } else {
-                if (response.status === 400) {
-                    alert('Количество символов должно быть меньше 255');
-                    location.reload();
-                } else {
-                    alert('Ошибка при создании каталога');
-                    location.reload();
-                }
+            if (!response.ok) {
+                throw new Error(response.status === 400 ? 'Количество символов должно быть меньше 255' : 'Ошибка при создании каталога');
             }
+            location.reload();
         } catch (error) {
-            alert('Ошибка при создании каталога');
+            alert(error.message);
             location.reload();
         }
     });
@@ -138,22 +138,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: formData,
                 });
 
-                if (response.ok) {
-                    location.reload();
-                } else {
-                    if (response.status === 413) {
-                        alert("Файл слишком большой");
-                        location.reload();
-                    } else if (response.status === 400) {
-                        alert("Недопустимый тип файла");
-                        location.reload();
-                    } else {
-                        alert("Ошибка во время загрузки файла");
-                        location.reload();
-                    }
+                if (!response.ok) {
+                    const error = response.status === 413 ? 'Файл слишком большой' : response.status === 400 ? 'Недопустимый тип файла' : 'Ошибка во время загрузки файла';
+                    throw new Error(error);
                 }
+                location.reload();
             } catch (error) {
-                alert("Ошибка во время загрузки файла");
+                alert(error.message);
                 location.reload();
             }
         }
@@ -161,11 +152,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     deleteButton.addEventListener('click', async () => {
         if (selectedItemId && selectedItemType) {
-            fetch('/delete', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({ itemId: selectedItemId, itemType: selectedItemType })
-            }).then(() => location.reload());
+            try {
+                await fetch('/delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ itemId: selectedItemId, itemType: selectedItemType })
+                });
+                location.reload();
+            } catch (error) {
+                alert('Ошибка при удалении элемента');
+            }
         }
     });
 
