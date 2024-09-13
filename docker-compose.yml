@@ -7,8 +7,6 @@ services:
       - ./:/var/www
       - ./vendor:/var/www/vendor
       - ./php-socket:/var/run/php
-    ports:
-      - 8000:9000
     restart: unless-stopped
     depends_on:
       - sw-mysql
@@ -17,7 +15,7 @@ services:
     environment:
       - COMPOSER_MEMORY_LIMIT=-1
     command: >
-        sh -c "cd /var/www && composer install && composer dump-autoload && chmod -R 777 /var/www/ && chmod -R 777 /var/run/php && php-fpm"
+        sh -c "cd /var/www && composer install && composer dump-autoload && chmod -R 777 /var/www/src/uploads && chmod -R 777 /var/run/php && php-fpm"
 
   sw-mysql:
     image: mysql
