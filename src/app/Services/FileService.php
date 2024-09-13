@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Utils\FileManager;
+use App\Interfaces\FileServiceInterface;
 
-class FileService
+class FileService implements FileServiceInterface
 {
     private FileManager $fileManager;
 

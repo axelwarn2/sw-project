@@ -2,7 +2,9 @@
 
 namespace App\Utils;
 
-class FileManager
+use App\Interfaces\FileManagerInterface;
+
+class FileManager implements FileManagerInterface
 {
     private $baseUploadDir;
 
