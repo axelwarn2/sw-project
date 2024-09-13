@@ -11,26 +11,17 @@ class FileModel extends Model
 
     public function getFiles()
     {
-        $query = "SELECT * FROM " . static::$table;
-        $stmt = CDatabase::getInstanse()->connection->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $this->getItems();
     }
 
     public function getFileName($fileId)
     {
-        $query = "SELECT filename FROM " . static::$table . " WHERE id = :id";
-        $stmt = CDatabase::getInstanse()->connection->prepare($query);
-        $stmt->execute(['id' => $fileId]);
-        return $stmt->fetchColumn();
+        return $this->getColumnById('filename', $fileId);
     }
 
     public function getFilePath($fileId)
     {
-        $query = "SELECT path FROM " . static::$table . " WHERE id = :id";
-        $stmt = CDatabase::getInstanse()->connection->prepare($query);
-        $stmt->execute(['id' => $fileId]);
-        return $stmt->fetchColumn();
+        return $this->getColumnById('path', $fileId);
     }
 
     public function getParentPath($directoryId)

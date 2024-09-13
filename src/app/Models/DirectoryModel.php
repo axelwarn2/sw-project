@@ -11,38 +11,22 @@ class DirectoryModel extends Model
 
     public function getDirectoryName($directoryId)
     {
-        $query = "SELECT name FROM " . static::$table . " WHERE id = :id";
-        $stmt = CDatabase::getInstanse()->connection->prepare($query);
-        $stmt->execute(['id' => $directoryId]);
-        return $stmt->fetchColumn();
+        return $this->getColumnById('name', $directoryId);
     }
 
     public function getDirectoryPath($directoryId)
     {
-        $query = "SELECT path FROM " . static::$table . " WHERE id = :id";
-        $stmt = CDatabase::getInstanse()->connection->prepare($query);
-        $stmt->execute(['id' => $directoryId]);
-        return $stmt->fetchColumn();
+        return $this->getColumn('path', ['id' => $directoryId]);
     }
 
     private function getParentPath($parentId)
     {
-        if ($parentId) {
-            $query = "SELECT path FROM " . static::$table . " WHERE id = :id";
-            $stmt = CDatabase::getInstanse()->connection->prepare($query);
-            $stmt->execute(['id' => $parentId]);
-            return $stmt->fetchColumn();
-        }
-
-        return '';
+        return $parentId ? $this->getColumn('path', ['id' => $parentId]) : "";
     }
 
     public function getDirectories(): array
     {
-        $query = "SELECT * FROM " . static::$table . " ORDER BY id";
-        $stmt = CDatabase::getInstanse()->connection->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $this->getItems();
     }
 
     public function createDirectory($name, $parentId)

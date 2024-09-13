@@ -16,19 +16,25 @@ abstract class Model
         $this->data = $data;
     }
 
-    public static function getById(int $id): self
+    public function getItems(): array
     {
-        $query = "SELECT * FROM " . static::$table . " WHERE id = :id";
+        $query = "SELECT * FROM " . static::$table;
         $stmt = CDatabase::getInstanse()->connection->prepare($query);
-        $stmt->execute(['id' => $id]);
-        $data = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-        return new static($data);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public static function getBy(array $criteria): array
+    protected function getColumnById(string $column, int $id): string
     {
-        $query = "SELECT * FROM " . static::$table . " WHERE ";
+        $query = "SELECT {$column} FROM " . static::$table . " WHERE id = :id";
+        $stmt = CDatabase::getInstanse()->connection->prepare($query);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetchColumn();
+    }
+
+    protected function getColumn(string $column, array $criteria): string
+    {
+        $query = "SELECT {$column} FROM " . static::$table . " WHERE ";
         $conditions = [];
         $params = [];
 
@@ -40,55 +46,7 @@ abstract class Model
         $query .= implode(" AND ", $conditions);
         $stmt = CDatabase::getInstanse()->connection->prepare($query);
         $stmt->execute($params);
-        $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-        return new static($data);
-    }
-
-    public static function create(array $data): self
-    {
-        $fields = array_keys($data);
-        $placeholders = array_map(function ($field) {
-            return ":{$field}";
-        }, $fields);
-        $query = "INSERT INTO " . static::$table . " (" . implode(',', $fields) . ") 
-        VALUES (" . implode(',', $placeholders) . ")";
-        $stmt = CDatabase::getInstanse()->connection->prepare($query);
-        $res = $stmt->execute($data);
-
-        if (!$res) {
-            return null;
-        }
-
-        $data['id'] = CDatabase::getInstanse()->connection->lastInsertId();
-
-        return new static($data);
-    }
-
-    public static function update(int $id, array $data): bool
-    {
-        $fields = [];
-
-        foreach ($data as $key => $value) {
-            $fields[] = "{$key} = :{$key}";
-        }
-
-        $query = "UPDATE " . static::$table . " SET " . implode(',', $fields) . " WHERE id = :id";
-        $data['id'] = $id;
-        $stmt = CDatabase::getInstanse()->connection->prepare($query);
-
-        return $stmt->execute($data);
-    }
-
-    public function save(): bool
-    {
-        $id = $this->getId();
-
-        if ($id) {
-            return self::update($this->getId(), $this->data);
-        }
-
-        return self::create($this->data);
+        return $stmt->fetchColumn();
     }
 
     public function delete(): bool
