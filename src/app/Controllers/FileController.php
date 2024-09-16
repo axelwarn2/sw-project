@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\FileModel;
 use App\Services\FileService;
+use App\Responses\Response;
 
 class FileController
 {
@@ -12,13 +13,14 @@ class FileController
     private int $maxFileSize = 20 * 1024 * 1024;
     private array $allowedFileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'txt', 'pdf'];
 
+    
     public function __construct(FileModel $fileModel, FileService $fileService)
     {
         $this->fileModel = $fileModel;
         $this->fileService = $fileService;
     }
 
-    public function createFile(): void
+    public function createFile(): array
     {
         if (isset($_FILES['file'])) {
             $directoryId = $_POST['directoryId'] ?? null;
@@ -28,13 +30,11 @@ class FileController
             $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
 
             if ($fileSize > $this->maxFileSize) {
-                http_response_code(413);
-                return;
+                return ['error' => "Превышен максимальный размер файла", 'statusCode' => 413];
             }
 
             if (!in_array($fileExtension, $this->allowedFileExtensions)) {
-                http_response_code(400);
-                return;
+                return ['error' => "Недопустимое расширение файла", 'statusCode' => 400];
             }
 
             if ($directoryId) {
@@ -45,23 +45,27 @@ class FileController
 
                 if ($this->fileService->uploadFile($tmpName, $uploadPath)) {
                     $this->fileModel->createFile($filename, $directoryId);
+                    return [
+                        'view' => 'index', 
+                        'directoryTree' => $this->fileModel->getDirectoryTree(),
+                    ];
                 } else {
-                    http_response_code(500);
+                    return ['error' => "Ошибка загрузки файла", 'statusCode' => 500];
                 }
             }
         }
+
+        return ['view' => 'index', 'directoryTree' => $this->fileModel->getDirectoryTree()];
     }
 
-    public function download(): void
+    public function download(): array
     {
         $filename = $_GET['filename'] ?? '';
 
         $filePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $filename;
 
         if (!file_exists($filePath)) {
-            http_response_code(404);
-            echo "Ошибка: Файл не найден.";
-            return;
+            return ['error' => "Файл не найден", 'statusCode' => 404];
         }
 
         header('Content-Description: File Transfer');

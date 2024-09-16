@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\DirectoryModel;
 use App\Models\FileModel;
 use App\Services\FileService;
+use App\Responses\Response;
 
 class DirectoryController
 {
@@ -19,19 +20,17 @@ class DirectoryController
         $this->fileService = $fileService;
     }
 
-    public function createDirectory(): void
+    public function createDirectory(): array
     {
         $parentId = $_POST['parentId'] ?? null;
         $name = $_POST['name'] ?? '';
-    
+
         if (empty($name)) {
-           http_response_code(400);
-           return;
+            return ['error' => 'Название каталога не может быть пустым', 'statusCode' => 400];
         }
 
         if (strlen($name) > 255) {
-            http_response_code(400);
-            return;
+            return ['error' => 'Название каталога слишком длинное', 'statusCode' => 400];
         }
 
         $parentPath = $this->directoryModel->getDirectoryPath($parentId) ?? '';
@@ -39,13 +38,18 @@ class DirectoryController
 
         $this->fileService->createDirectory($fullPath);
         $this->directoryModel->createDirectory($name, $parentId);
+
+        return [
+            'view' => 'index', 
+            'directoryTree' => $this->directoryModel->getDirectoryTree()
+        ];
     }
 
-    public function delete(): void
+    public function delete(): array
     {
         $itemId = $_POST['itemId'] ?? null;
         $itemType = $_POST['itemType'] ?? '';
-        
+
         if ($itemType === 'file') {
             $filePath = $this->fileModel->getFilePath($itemId);
             $this->fileModel->deleteFile($itemId);
@@ -55,5 +59,10 @@ class DirectoryController
             $this->directoryModel->deleteDirectory($itemId);
             $this->fileService->deleteDirectory($dirPath);
         }
+
+        return [
+            'view' => 'index', 
+            'directoryTree' => $this->directoryModel->getDirectoryTree()
+        ];
     }
 }

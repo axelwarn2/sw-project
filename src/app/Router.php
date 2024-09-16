@@ -2,9 +2,10 @@
 
 namespace App;
 
-use App\Models\DirectoryModel;  
+use App\Models\DirectoryModel;
 use App\Models\FileModel;
 use App\Controllers\Controller;
+use App\Responses\Response;
 
 class Router
 {
@@ -36,20 +37,25 @@ class Router
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $method = $_SERVER['REQUEST_METHOD'];
 
-        if (isset($this->routes[$method][$uri])) {
-            $action = $this->routes[$method][$uri];
-            [$controller, $method] = explode('@', $action);
+        try {
+            if (isset($this->routes[$method][$uri])) {
+                $action = $this->routes[$method][$uri];
+                [$controller, $method] = explode('@', $action);
 
-            $controller = ControllerFactory::create($controller);
+                $controller = ControllerFactory::create($controller);
 
-            $data = call_user_func([$controller, $method]);
-            if($data){
-                extract($data);
+                $data = call_user_func([$controller, $method]);
+
+                if (isset($data['view'])) {
+                    Response::render($data['view'], $data);
+                } else {
+                    Response::render('index', $data);
+                }
+            } else {
+                throw new \Exception('Page not found', 404);
             }
-
-            require __DIR__ . '/Views/index.php';
-        } else {
-            throw new \Exception('Page not found', 404);
+        } catch (\Exception $e) {
+            Response::render('error', ['error' => $e->getMessage(), 'statusCode' => $e->getCode()]);
         }
     }
 }

@@ -6,9 +6,5 @@ use App\Router;
 
 $router = new Router();
 
-try {
-    $router->run();
-} catch (\Exception $e) {
-    http_response_code($e->getCode());
-    echo "Error: {$e->getMessage()}";
-}
+$router->run();
+

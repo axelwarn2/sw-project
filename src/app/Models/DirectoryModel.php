@@ -14,12 +14,12 @@ class DirectoryModel extends Model
         return $this->getColumnById('name', $directoryId);
     }
 
-    public function getDirectoryPath(?int $directoryId): ?string
+    public function getDirectoryPath(?string $directoryId): ?string
     {
         return $this->getColumn('path', ['id' => $directoryId]);
     }
 
-    private function getParentPath(?int $parentId): string
+    private function getParentPath(?string $parentId): string
     {
         return $parentId ? $this->getColumn('path', ['id' => $parentId]) : "";
     }
@@ -29,7 +29,7 @@ class DirectoryModel extends Model
         return $this->getItems();
     }
 
-    public function createDirectory(string $name, ?int $parentId): void
+    public function createDirectory(string $name, ?string $parentId): void
     {
         $path = $this->getParentPath($parentId) . '/' . $name;
 
