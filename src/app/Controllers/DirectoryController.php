@@ -19,7 +19,7 @@ class DirectoryController
         $this->fileService = $fileService;
     }
 
-    public function createDirectory()
+    public function createDirectory(): void
     {
         $parentId = $_POST['parentId'] ?? null;
         $name = $_POST['name'] ?? '';
@@ -41,7 +41,7 @@ class DirectoryController
         $this->directoryModel->createDirectory($name, $parentId);
     }
 
-    public function delete()
+    public function delete(): void
     {
         $itemId = $_POST['itemId'] ?? null;
         $itemType = $_POST['itemType'] ?? '';

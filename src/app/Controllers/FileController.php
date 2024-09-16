@@ -9,8 +9,8 @@ class FileController
 {
     private FileModel $fileModel;
     private FileService $fileService;
-    private $maxFileSize = 20 * 1024 * 1024;
-    private $allowedFileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'txt', 'pdf'];
+    private int $maxFileSize = 20 * 1024 * 1024;
+    private array $allowedFileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'txt', 'pdf'];
 
     public function __construct(FileModel $fileModel, FileService $fileService)
     {
@@ -18,7 +18,7 @@ class FileController
         $this->fileService = $fileService;
     }
 
-    public function createFile()
+    public function createFile(): void
     {
         if (isset($_FILES['file'])) {
             $directoryId = $_POST['directoryId'] ?? null;
@@ -52,7 +52,7 @@ class FileController
         }
     }
 
-    public function download()
+    public function download(): void
     {
         $filename = $_GET['filename'] ?? '';
 

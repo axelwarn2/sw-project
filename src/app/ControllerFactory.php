@@ -10,7 +10,7 @@ use App\Utils\FileManager;
 
 class ControllerFactory
 {
-    public static function create($controllerName)
+    public static function create(string $controllerName): object
     {
         $fileManager = new FileManager();
         $fileService = new FileService($fileManager);

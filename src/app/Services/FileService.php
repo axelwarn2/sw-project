@@ -14,27 +14,27 @@ class FileService implements FileServiceInterface
         $this->fileManager = $fileManager;
     }
 
-    public function uploadFile($tmpName, $uploadPath)
+    public function uploadFile(string $tmpName, string $uploadPath): bool
     {
         return $this->fileManager->uploadFile($tmpName, $uploadPath);
     }
 
-    public function deleteFile($filePath)
+    public function deleteFile(string $filePath): bool
     {
         return $this->fileManager->deleteFile($filePath);
     }
 
-    public function createDirectory($fullPath)
+    public function createDirectory(string $fullPath): bool
     {
         return $this->fileManager->createDirectory($fullPath);
     }
 
-    public function deleteDirectory($directoryPath)
+    public function deleteDirectory(string $directoryPath): bool
     {
         return $this->fileManager->deleteDirectory($directoryPath);
     }
 
-    public function getUploadDir()
+    public function getUploadDir(): string
     {
         return $this->fileManager->getBaseUploadDir();
     }

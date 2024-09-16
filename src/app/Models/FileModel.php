@@ -9,22 +9,22 @@ class FileModel extends Model
 {
     protected static string $table = 'files';
 
-    public function getFiles()
+    public function getFiles(): array
     {
         return $this->getItems();
     }
 
-    public function getFileName($fileId)
+    public function getFileName(int $fileId): string
     {
         return $this->getColumnById('filename', $fileId);
     }
 
-    public function getFilePath($fileId)
+    public function getFilePath(int $fileId): string
     {
         return $this->getColumnById('path', $fileId);
     }
 
-    public function getParentPath($directoryId)
+    public function getParentPath(int $directoryId): string
     {
         $query = "SELECT path FROM directories WHERE id = :directoryId";
         $stmt = CDatabase::getInstanse()->connection->prepare($query);
@@ -32,7 +32,7 @@ class FileModel extends Model
         return $stmt->fetchColumn();
     }
 
-    public function createFile($filename, $directoryId)
+    public function createFile(string $filename, int $directoryId): void
     {
         $directoryPath = 'uploads' . $this->getParentPath($directoryId);
         $path = $directoryPath . '/' . $filename;
@@ -45,7 +45,7 @@ class FileModel extends Model
         ]);
     }
 
-    public function deleteFile($fileId)
+    public function deleteFile(int $fileId): void
     {
         static::deleteIternal($fileId);
     }

@@ -9,17 +9,17 @@ class DirectoryModel extends Model
 {
     protected static string $table = 'directories';
 
-    public function getDirectoryName($directoryId)
+    public function getDirectoryName(int $directoryId): string
     {
         return $this->getColumnById('name', $directoryId);
     }
 
-    public function getDirectoryPath($directoryId)
+    public function getDirectoryPath(?int $directoryId): ?string
     {
         return $this->getColumn('path', ['id' => $directoryId]);
     }
 
-    private function getParentPath($parentId)
+    private function getParentPath(?int $parentId): string
     {
         return $parentId ? $this->getColumn('path', ['id' => $parentId]) : "";
     }
@@ -29,7 +29,7 @@ class DirectoryModel extends Model
         return $this->getItems();
     }
 
-    public function createDirectory($name, $parentId)
+    public function createDirectory(string $name, ?int $parentId): void
     {
         $path = $this->getParentPath($parentId) . '/' . $name;
 
@@ -38,7 +38,7 @@ class DirectoryModel extends Model
         $stmt->execute(['name' => $name, 'parent_id' => $parentId ? $parentId : null, 'path' => $path]);
     }
 
-    public function deleteDirectory($directoryId)
+    public function deleteDirectory(int $directoryId): void
     {
         $query = "DELETE FROM files WHERE directory_id = :directory_id";
         $stmt = CDatabase::getInstanse()->connection->prepare($query);

@@ -17,7 +17,7 @@ class ViewController
         $this->fileModel = $fileModel;
     }
 
-    public function index()
+    public function index(): array
     {   
         $directories = $this->directoryModel->getDirectories();
         $files = $this->fileModel->getFiles();

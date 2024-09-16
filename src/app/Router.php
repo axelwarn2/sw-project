@@ -15,23 +15,23 @@ class Router
         $this->loadRoutes();
     }
 
-    private function loadRoutes() 
+    private function loadRoutes(): void
     {
         $config = require __DIR__ . '/config/routes.php';
         $this->routes = $config;
     }
 
-    private function get($uri, $action)
+    private function get(string $uri, string $action): void
     {
         $this->routes['GET'][$uri] = $action;
     }
 
-    private function post($uri, $action)
+    private function post(string $uri, string $action): void
     {
         $this->routes['POST'][$uri] = $action;
     }
 
-    public function run()
+    public function run(): void
     {
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $method = $_SERVER['REQUEST_METHOD'];

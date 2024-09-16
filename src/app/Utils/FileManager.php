@@ -6,14 +6,14 @@ use App\Interfaces\FileManagerInterface;
 
 class FileManager implements FileManagerInterface
 {
-    private $baseUploadDir;
+    private string $baseUploadDir;
 
     public function __construct()
     {
         $this->baseUploadDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads';
     }
 
-    public function createDirectory($path)
+    public function createDirectory(string $path): bool
     {
         $fullPath = $this->baseUploadDir . '/' . $path;
 
@@ -24,7 +24,7 @@ class FileManager implements FileManagerInterface
         return true;
     }
 
-    public function uploadFile($tmpName, $uploadPath)
+    public function uploadFile(string $tmpName, string $uploadPath): bool
     {
         $fullPath = $this->baseUploadDir . $uploadPath;
 
@@ -37,7 +37,7 @@ class FileManager implements FileManagerInterface
         return move_uploaded_file($tmpName, $fullPath);
     }
 
-    public function deleteFile($filePath)
+    public function deleteFile(string $filePath): bool
     {
         $fullPath = $filePath;
 
@@ -48,7 +48,7 @@ class FileManager implements FileManagerInterface
         return false;
     }
 
-    public function deleteDirectory($directoryPath)
+    public function deleteDirectory(string $directoryPath): bool
     {
         $fullPath = $this->baseUploadDir . '/' . $directoryPath;
 
@@ -60,12 +60,12 @@ class FileManager implements FileManagerInterface
         return false;
     }
 
-    public function getBaseUploadDir()
+    public function getBaseUploadDir(): string
     {
         return $this->baseUploadDir;
     }
 
-    private function deleteDirectoryRecursively($directory)
+    private function deleteDirectoryRecursively(string $directory): void
     {
         foreach (scandir($directory) as $item) {
             if ($item === '.' || $item === '..') {

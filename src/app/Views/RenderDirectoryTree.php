@@ -4,12 +4,12 @@ namespace App\Views;
 
 class RenderDirectoryTree
 {
-    public function render($directories, $files)
+    public function render(array $directories, array $files): string
     {
-        return $this->buildTreeHtml($directories, $files);
+        return $this->buildTreeHtml($directories, $files, null);
     }
 
-    protected function buildTreeHtml($directories, $files, $parentId = null)
+    protected function buildTreeHtml(array $directories, array $files, ?int $parentId): string
     {
         $html = '';
 
