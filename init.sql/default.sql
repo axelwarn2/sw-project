@@ -16,10 +16,9 @@ CREATE TABLE `directories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `directories` (`id`, `name`, `parent_id`, `path`) VALUES
-(1,	'images',	NULL,	'images'),
-(2,	'myfolder',	NULL,	'myfolder'),
-(3,	'animals',	1,	'images/animals'),
-(4,	'photos',	2,	'myfolder/photos');
+(6,	'images',	NULL,	'/images'),
+(8,	'images2',	6,	'/images/images2'),
+(9,	'myfolder',	NULL,	'/myfolder');
 
 CREATE TABLE `files` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -30,9 +29,9 @@ CREATE TABLE `files` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `files` (`id`, `filename`, `directory_id`, `path`) VALUES
-(2,	'cat.jpeg',	3,	'images/animals/cat.jpeg'),
-(3,	'myphoto.jpeg',	4,	'myfolder/photos/myphoto.jpeg'),
-(4,	'dock.docx',	4,	'myfolder/photos/dock.docx'),
-(18,	'dog.jpeg',	3,	'uploads/dog.jpeg');
+(21,	'cat.jpeg',	8,	'uploads/images/images2/cat.jpeg'),
+(22,	'dog.jpeg',	8,	'uploads/images/images2/dog.jpeg'),
+(23,	'myphoto.jpeg',	9,	'uploads/myfolder/myphoto.jpeg'),
+(24,	'Ночь.jpeg',	9,	'uploads/myfolder/Ночь.jpeg');
 
--- 2024-09-04 09:52:31
+-- 2024-09-17 05:17:41
