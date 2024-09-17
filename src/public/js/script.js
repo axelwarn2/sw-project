@@ -60,17 +60,17 @@ document.addEventListener('DOMContentLoaded', () => {
         fileTarget.classList.add('selected');
         selectedItemId = fileTarget.dataset.id;
         selectedItemType = 'file';
-
+    
         directoryNameInput.value = '';
         directoryNameInput.disabled = true;
 
-        const folderPath = fileTarget.closest('.directory__item').querySelector('.directory__folder').dataset.path;
+        const filePath = fileTarget.dataset.path;
         const fileName = fileTarget.textContent.trim();
-        selectedFilePath = `${folderPath}${fileName}`;
+        selectedFilePath = filePath;
         updateSelectedPath(selectedFilePath);
 
         const isImage = /\.(jpg|jpeg|png|gif)$/i.test(fileName);
-        photosImg.src = isImage ? `../uploads/${fileTarget.dataset.path}` : '../public/images/noimage.jpeg';
+        photosImg.src = isImage ? `../uploads/${filePath}` : '../public/images/noimage.jpeg';
         photosImg.style.display = 'block';
 
         setButtonState(addFolderButton, false);
@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setButtonState(deleteButton, true);
         setButtonState(downloadButton, true);
     };
+    
 
     directoryNameInput.addEventListener('input', () => {
         const isActive = directoryNameInput.value.trim() !== '';

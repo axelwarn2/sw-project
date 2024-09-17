@@ -16,23 +16,33 @@ class RenderDirectoryTree
         foreach ($directories as $directory) {
             if ($directory['parent_id'] == $parentId) {
                 $html .= '<div class="directory__item">';
-                $html .= '<p class="directory__folder" data-id="' . htmlspecialchars($directory['id']) . '" data-path="' . $directory['path']  . "/" . '">
-                            <img src="../public/images/Folder.jpg" alt="Folder"> ' . htmlspecialchars($directory['name']) . '
-                          </p>';
+                $html .= $this->renderDirectory($directory);
 
                 foreach ($files as $file) {
                     if ($file['directory_id'] == $directory['id']) {
-                        $html .= '<p class="directory__file" data-id="' . htmlspecialchars($file['id']) . '" data-path="' . htmlspecialchars($directory['path'] . '/' . $file['filename']) . '">
-                                    <img src="../public/images/File.png" alt="File"> ' . htmlspecialchars($file['filename']) . '
-                                  </p>';
+                        $html .= $this->renderFile($file, $directory);
                     }
                 }
-
+                
                 $html .= $this->buildTreeHtml($directories, $files, $directory['id']);
                 $html .= '</div>';
             }
         }
 
         return $html;
+    }
+
+    protected function renderDirectory(array $directory): string
+    {
+        ob_start();
+        include __DIR__ . '/Template/directoryTemplate.php';
+        return ob_get_clean();
+    }
+
+    protected function renderFile(array $file, array $directory): string
+    {
+        ob_start();
+        include __DIR__ . '/Template/fileTemplate.php';
+        return ob_get_clean();
     }
 }
