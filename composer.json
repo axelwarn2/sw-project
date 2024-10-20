@@ -1,0 +1,13 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Src\\": "src/",
+            "App\\": "src/app/",
+            "Framework\\": "src/framework/"
+        }
+    },
+    "require": {
+        "symfony/var-dumper": "^7.1",
+        "vlucas/phpdotenv": "^5.6"
+    }
+}

@@ -1,0 +1,54 @@
+services:
+  sw-php:
+    build:
+      context: .
+      dockerfile: ./.docker/php/Dockerfile
+    volumes:
+      - ./:/var/www
+      - ./vendor:/var/www/vendor
+      - ./php-socket:/var/run/php
+    restart: unless-stopped
+    depends_on:
+      - sw-mysql
+    networks:
+      - sw
+
+  sw-mysql:
+    image: mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    restart: unless-stopped
+    ports:
+      - ${DB_PORT}:3306
+    networks:
+      - sw
+    volumes:
+      - mysql-data:/var/lib/misc
+      - ./init.sql:/docker-entrypoint-initdb.d
+
+  sw-nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+    depends_on:
+      - sw-php
+      - sw-mysql  
+    restart: unless-stopped
+    volumes:
+      - ./.docker/nginx/logs:/var/log/nginx
+      - ./.docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./:/var/www
+      - ./php-socket:/var/run/php
+    networks:
+      - sw
+
+networks:
+  sw:
+    driver: bridge
+
+volumes:
+  mysql-data:
